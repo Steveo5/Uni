@@ -93,7 +93,7 @@ class Game
 					snakePos.x -= 20.f;
 				}
 				else if (direction == 2)
-				{
+				{ 
 					snakePos.x += 20.f;
 				}
 				else if (direction == 3)
