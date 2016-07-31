@@ -1,12 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <random>
 
 class Game
 {
 	private:
 		int direction = 2;
 		std::vector<sf::CircleShape> snake;
+		std::vector<sf::CircleShape> food;
 	public:
 		Game::Game()
 			: mWindow(sf::VideoMode(640, 480), "My Test Game")
@@ -76,6 +78,26 @@ class Game
 		sf::Clock clock;
 		void update(sf::Time deltaTime)
 		{
+			if (food.size() < 1)
+			{
+				int multiple = 20;
+				
+				std::random_device rd;
+				std::mt19937 eng(rd());
+				std::uniform_int_distribution<> r(20, 200);
+
+				int rX = r(eng);
+				int rZ = r(eng);
+
+				rX = rX + multiple - 1 - (rX - 1) % multiple;
+				rZ = rZ + multiple - 1 - (rZ - 1) % multiple;
+
+				sf::CircleShape foodPiece;
+				foodPiece.setRadius(10.f);
+				foodPiece.setPosition(rX, rZ);
+				foodPiece.setFillColor(sf::Color::Green);
+				food.push_back(foodPiece);
+			}
 			//Update the snakes body pathing every second
 			if (clock.getElapsedTime().asSeconds() > 0.1f)
 			{
@@ -93,7 +115,7 @@ class Game
 					snakePos.x -= 20.f;
 				}
 				else if (direction == 2)
-				{ 
+				{
 					snakePos.x += 20.f;
 				}
 				else if (direction == 3)
@@ -105,6 +127,13 @@ class Game
 					snakePos.y += 20.f;
 				}
 				snake[0].setPosition(snakePos);
+				for (int i = 0; i < food.size(); i++)
+				{
+					if (food[i].getPosition().x == snakePos.x && food[i].getPosition().y == snakePos.y)
+					{
+						food.erase(food.begin() + 0);
+					}
+				}
 			}
 		}
 		void render()
@@ -113,6 +142,10 @@ class Game
 			for (int i = 0; i < snake.size(); i++)
 			{
 				mWindow.draw(snake[i]);
+			}
+			for (int i = 0; i < food.size(); i++)
+			{
+				mWindow.draw(food[i]);
 			}
 			mWindow.display();
 		}
