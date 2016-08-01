@@ -1,8 +1,20 @@
 #pragma once
+#include "SFML/Graphics.hpp"
+
+#define MAX_NUMBER_OF_IOTEMS 3;
+
 class Menu
 {
 public:
-Menu();
-~Menu();
+	Menu(float width, float height);
+	~Menu();
+
+	void draw(sf::RenderWindow &window);
+	void MoveUp();
+	void MoveDown();
+private:
+	int selectItemIndex;
+	sf::Font font;
+	sf::Text text;
 };
 

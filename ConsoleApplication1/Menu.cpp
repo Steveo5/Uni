@@ -1,8 +1,7 @@
 #include "Menu.h"
 
 
-
-Menu::Menu()
+Menu::Menu(float width, float height)
 {
 }
 

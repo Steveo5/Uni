@@ -48,6 +48,7 @@ class Game
 			const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
 			while (mWindow.isOpen())
 			{
+				//Only continue with gamelogic if the gamestate is running (1)
 				proccessEvents();
 				timeSinceLastUpdate += clock.restart();
 				while (timeSinceLastUpdate > timePerFrame)
@@ -55,13 +56,15 @@ class Game
 					timeSinceLastUpdate -= timePerFrame;
 					proccessEvents();
 					update(timePerFrame);
+
 				}
+
 				render();
 			}
 		}
 	private:
 		//Check the gamestate, returns true if the game should be running
-		bool checkState()
+		void checkState()
 		{
 			if (gamestate == 0)
 			{
@@ -69,13 +72,13 @@ class Game
 			}
 			else if (gamestate == 1)
 			{
-				return true;
+				
 			}
 			else if (gamestate == 2)
 			{
 
 			}
-			return false;
+			
 		}
 		void proccessEvents()
 		{
