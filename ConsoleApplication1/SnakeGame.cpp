@@ -48,6 +48,7 @@ class Game
 			
 			while (mWindow.isOpen())
 			{
+				
 				//Only continue with gamelogic if the gamestate is running (1)
 				proccessEvents();
 				if (gameState == 1)
@@ -103,7 +104,6 @@ class Game
 						menu.handleInput(event.key.code, false);
 						break;
 					}
-					menu.Draw(mWindow);
 				}
 				if (event.type == sf::Event::Closed)
 				{
@@ -144,6 +144,7 @@ class Game
 		void Game::render()
 		{
 			mWindow.clear();
+			
 			if (gameState == 1)
 			{
 				//Loop over all snakes
@@ -161,9 +162,13 @@ class Game
 					mWindow.draw(food[i]);
 				}
 			}
-			else if (gameState == 1 && !menu.isOpen())
+			else if (gameState == 0 && !menu.isOpen())
 			{
 				menu.Open(mWindow, 1);
+			}
+			else if (gameState == 0)
+			{
+				menu.Draw(mWindow);
 			}
 			mWindow.display();
 		}

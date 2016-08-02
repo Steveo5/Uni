@@ -1,8 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-#define MAX_NUMBER_OF_ITEMS 3;
-
 class Menu
 {
 public:
@@ -16,8 +14,11 @@ public:
 	void handleInput(sf::Keyboard::Key key, bool isPressed);
 
 private:
+	
 	int selectItemIndex;
+	std::vector<sf::Text> buttons;
 	sf::Font font;
 	sf::Text text;
+
 };
 
