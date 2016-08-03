@@ -30,6 +30,12 @@
     <ClInclude Include="Menu.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Snake.cpp">
@@ -42,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="SnakeGame.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>

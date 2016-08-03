@@ -4,6 +4,8 @@
 #include <random>
 #include "Snake.h"
 #include "Menu.h"
+#include "Game.h"
+#include "Grid.h"
 
 class Game
 {
@@ -16,6 +18,7 @@ class Game
 		Game::Game()
 			: mWindow(sf::VideoMode(640, 480), "My Test Game")
 			, menu(mWindow.getSize().x, mWindow.getSize().y)
+			, grid()
 		{
 			Snake player1(1);
 			snake.push_back(player1);
@@ -70,6 +73,11 @@ class Game
 			return gameState == 1;
 		}
 
+		void Game::start()
+		{
+			gameState = 1;
+		}
+
 		void Game::stop()
 		{
 			gameState = 0;
@@ -81,6 +89,16 @@ class Game
 			sf::Event event;
 			while (mWindow.pollEvent(event))
 			{
+				if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+				{
+					stop();
+					menu.Open(0);
+					return;
+				}
+				if (menu.getSelectedItemIndex() < 0)
+				{
+					start();
+				}
 				if (gameState == 1)
 				{
 					switch (event.type)
@@ -162,19 +180,18 @@ class Game
 					mWindow.draw(food[i]);
 				}
 			}
-			else if (gameState == 0 && !menu.isOpen())
-			{
-				menu.Open(mWindow, 1);
-			}
 			else if (gameState == 0)
 			{
+				std::cout << "drawing menu" << std::endl;
 				menu.Draw(mWindow);
 			}
 			mWindow.display();
 		}
+
 	private:
 		sf::RenderWindow mWindow;
 		Menu menu;
+		Grid grid;
 
 		void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		{

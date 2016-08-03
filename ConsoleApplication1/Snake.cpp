@@ -42,35 +42,34 @@ void Snake::update(sf::Time deltaTime)
 		{
 			if (i != 0)
 			{
-				sf::Vector2f cPos = snake[i].getPosition();
-				sf::Vector2f sPos = snake[i-1].getPosition();
-				sf::Vector2f movement(0.f, 0.f);
-				int xPos = round(sPos.x);
-				int yPos = round(sPos.y);
-				xPos = xPos + 20 - 1 - (xPos - 1) % 20;
-				yPos = yPos + 20 - 1 - (yPos - 1) % 20;
+				if (i == 1)
+				{
+					sf::Vector2f previousPos = snake[i - 1].getPosition();
+					if (direction == 1)
+					{
+						previousPos.x = previousPos.x - 20;
+					}
+					else if (direction == 2)
+					{
+						previousPos.x = previousPos.x + 20;
+					}
+					else if (direction == 3)
+					{
+						previousPos.y = previousPos.y + 20;
+					}
+					else if (direction == 4)
+					{
+						previousPos.y = previousPos.y - 20;
+					}
+					snake[i].setPosition(previousPos);
+				}
+				else
+				{
+					sf::Vector2f previousPos = snake[i - 1].getPosition();
+					//yPos = yPos + 20 - 1 - (yPos - 1) % 20;
 
-				int cxPos = round(cPos.x);
-				int cyPos = round(cPos.y);
-				cxPos = cxPos + 20 - 1 - (cxPos - 1) % 20;
-				cyPos = cyPos + 20 - 1 - (cyPos - 1) % 20;
-				if (cxPos > sPos.x)
-				{
-					movement.x -= 500;
+					snake[i].setPosition(previousPos);
 				}
-				else if (cxPos < sPos.x)
-				{
-					movement.x += 500;
-				} else if (cyPos > sPos.y)
-				{
-					movement.y += 500;
-				}
-				else if (cyPos < sPos.y)
-				{
-					movement.y -= 500;
-				}
-				//snake[i].setPosition(snake[i - 1].getPosition());
-				snake[i].move(movement * deltaTime.asSeconds());
 			}
 		}
 		//Get the snakes head location

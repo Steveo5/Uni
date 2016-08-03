@@ -1,58 +1,104 @@
 #include "Menu.h"
 #include <iostream>
 
+#define MAX_MENU_ITEMS = 5;
+
 Menu::Menu(float width, float height)
 {
 	if (!font.loadFromFile("Font/arial.ttf"))
 	{
 
 	}
-	sf::Text t1,t2;
+	sf::Text t1,t2,t3;
 	t1.setString("Start");
 	t2.setString("Options");
+	t3.setString("Quit");
 
-	buttons.push_back(t1);
-	buttons.push_back(t2);
+	buttons[0].push_back(t1);
+	buttons[0].push_back(t2);
+	buttons[0].push_back(t3);
 
-	for (int i = 0; i < buttons.size(); i++)
+	for (int b = 0; b < 5; b++)
 	{
-		buttons[i].setFont(font);
-		buttons[i].setPosition(sf::Vector2f(width / 2 - (buttons[i].getLocalBounds().width/2), height / 2 - (buttons[i].getLocalBounds().height/2 - i * 50)));
+		for (int i = 0; i < buttons[b].size(); i++)
+		{
+			buttons[b][i].setFont(font);
+			buttons[b][i].setPosition(sf::Vector2f(width / 2 - (buttons[b][i].getLocalBounds().width / 2), height / 2 - ((buttons[b][i].getLocalBounds().height / 2) - i * 50)));
+		}
 	}
 }
 
 bool Menu::isOpen()
 {
-	return true;
+	return openMenu == 0;
 }
 
 
-void Menu::Open(sf::RenderWindow &window, int windowId)
+void Menu::Open(int windowId)
 {
-	
+	openMenu = windowId;
 
 }
 
 void Menu::Draw(sf::RenderWindow &window)
 {
-	for (int i = 0; i < buttons.size(); i++)
+	for (int i = 0; i < buttons[getOpenMenu()].size(); i++)
 	{
-		std::cout << "test drawing" << std::endl;
-		window.draw(buttons[i]);
+		sf::Text& button = buttons[getOpenMenu()][i];
+		if (i == getSelectedItemIndex())
+		{
+			button.setColor(sf::Color::Red);
+		}
+		else
+		{
+			button.setColor(sf::Color::White);
+		}
+		window.draw(button);
 	}
+}
+
+int Menu::getOpenMenu()
+{
+	return openMenu;
 }
 
 void Menu::MoveUp()
 {
-
+	selectItemIndex--;
 }
 
 void Menu::MoveDown()
 {
-
+	selectItemIndex++;
 }
 
 void Menu::handleInput(sf::Keyboard::Key key, bool isPressed)
-{
+{	
+	if (isPressed)
+	{
+		if (key == sf::Keyboard::Key::Up)
+		{
+			MoveUp();
+		}
+		else if (key == sf::Keyboard::Key::Down)
+		{
+			MoveDown();
+		}
+		if (key == sf::Keyboard::Key::Space)
+		{
+			//Do the things for menu with id = 0
+			if (openMenu == 0)
+			{
+				if (selectItemIndex == 0)
+				{
+					selectItemIndex = -1;
+				}
+			}
+		}
+	}
+}
 
+int Menu::getSelectedItemIndex()
+{
+	return selectItemIndex;
 }
