@@ -40,72 +40,43 @@ void Snake::update(sf::Time deltaTime)
 		//Update the snakes body segement locations
 		for (int i = snake.size() - 1; i > 0; i--)
 		{
-			if (i != 0)
-			{
-				if (i == 1)
-				{
-					sf::Vector2f previousPos = snake[i - 1].getPosition();
-					if (direction == 1)
-					{
-						previousPos.x = previousPos.x - 20;
-					}
-					else if (direction == 2)
-					{
-						previousPos.x = previousPos.x + 20;
-					}
-					else if (direction == 3)
-					{
-						previousPos.y = previousPos.y + 20;
-					}
-					else if (direction == 4)
-					{
-						previousPos.y = previousPos.y - 20;
-					}
-					snake[i].setPosition(previousPos);
-				}
-				else
-				{
 					sf::Vector2f previousPos = snake[i - 1].getPosition();
 					//yPos = yPos + 20 - 1 - (yPos - 1) % 20;
 
 					snake[i].setPosition(previousPos);
-				}
-			}
+	
 		}
 		//Get the snakes head location
 		sf::Vector2f snakePos = snake[0].getPosition();
-		sf::Vector2f movement(0.f, 0.f);
-		int xPos = snakePos.x;
-		int yPos = snakePos.y;
-		xPos = xPos + 20 - 1 - (xPos - 1) % 20;
-		yPos = yPos + 20 - 1 - (yPos - 1) % 20;
 
 		//Find the snakes direction and keep the momentum going
 		if (direction == 1)
 		{
-			movement.x -= 500.f;
+			snakePos.x -= 20.f;
 		}
 		else if (direction == 2)
 		{
-			movement.x += 500.f;
+			snakePos.x += 20.f;
 		}
 		else if (direction == 3)
 		{
-			movement.y -= 500.f;
+			snakePos.y -= 20.f;
 		}
 		else if (direction == 4)
 		{
-			movement.y += 500.f;
+			snakePos.y += 20.f;
 		}
+
+		snake[0].setPosition(snakePos);
 		//Changing the snakes head location
-		snake[0].move(movement * deltaTime.asSeconds());
+		//snake[0].move(snakePos * deltaTime.asSeconds());
 		//Check if the snake is colliding with itself
 		for (int i = 0; i < snake.size(); i++)
 		{
 			sf::Vector2f pos = snake[i].getPosition();
 			if (i > 0 && pos == snakePos)
 			{
-				std::cout << "COLIDE" << std::endl;
+				
 			}
 			//Checking if the snake is out of bounds
 			if (pos.x > 640.0f)

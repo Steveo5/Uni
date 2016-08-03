@@ -37,7 +37,7 @@ bool Menu::isOpen()
 void Menu::Open(int windowId)
 {
 	openMenu = windowId;
-
+	selectItemIndex = 0;
 }
 
 void Menu::Draw(sf::RenderWindow &window)

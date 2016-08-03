@@ -18,7 +18,7 @@ class Game
 		Game::Game()
 			: mWindow(sf::VideoMode(640, 480), "My Test Game")
 			, menu(mWindow.getSize().x, mWindow.getSize().y)
-			, grid()
+			, grid(mWindow.getSize().y)
 		{
 			Snake player1(1);
 			snake.push_back(player1);
@@ -91,8 +91,9 @@ class Game
 			{
 				if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				{
-					stop();
-					menu.Open(0);
+						stop();
+						menu.Open(0);
+					
 					return;
 				}
 				if (menu.getSelectedItemIndex() < 0)
@@ -165,6 +166,7 @@ class Game
 			
 			if (gameState == 1)
 			{
+				grid.draw(mWindow);
 				//Loop over all snakes
 				for (int i = 0; i < snake.size(); i++)
 				{
