@@ -10,29 +10,12 @@ Snake::Snake(int playerNo)
 	mPlayer.setPosition(100.f, 100.f);
 	mPlayer.setFillColor(sf::Color::Yellow);
 	snake.push_back(mPlayer);
-	sf::CircleShape s1; 
-		s1.setRadius(10.f);
-	s1.setPosition(80.f, 100.f);
-	s1.setFillColor(sf::Color::Cyan);
-	sf::CircleShape s2;
-	s2.setRadius(10.f);
-	s2.setPosition(60.f, 100.f);
-	s2.setFillColor(sf::Color::Cyan);
-	sf::CircleShape s3;
-	s3.setRadius(10.f);
-	s3.setPosition(40.f, 100.f);
-	s3.setFillColor(sf::Color::Cyan);
-
-	//Test data for snake
-	snake.push_back(s1);
-	snake.push_back(s2);
-	snake.push_back(s3);
 }
 
 void Snake::update(sf::Time deltaTime)
 {
 	//Update the snake every 10th of a second
-	if (clock.getElapsedTime().asSeconds() > 0.05f)
+	if (clock.getElapsedTime().asSeconds() > 0.1f)
 	{
 		//Restart the clock
 		clock.restart();
@@ -147,7 +130,30 @@ void Snake::updateMovement(sf::Keyboard::Key key, bool isPressed)
 }
 
 //Get the body segments where index 0 is the snakes head
-std::vector<sf::CircleShape> Snake::getBody()
+std::vector<sf::CircleShape> &Snake::getBody()
 {
 	return snake;
+}
+
+void Snake::handleCollision(sf::CircleShape obj, bool isFood)
+{
+	if (isFood)
+	{
+		sf::CircleShape segment;
+		segment.setRadius(10.f);
+		segment.setPosition(100000.f, 100000.f);
+		segment.setFillColor(sf::Color::Cyan);
+		snake.push_back(segment);
+		score += 20;
+	}
+}
+
+int Snake::getScore()
+{
+	return score;
+}
+
+void Snake::setScore(int newScore)
+{
+	score = newScore;
 }

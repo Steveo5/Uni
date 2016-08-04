@@ -5,10 +5,12 @@ class Grid
 {
 private:
 	//Count should be resolution / 2
-	int vTileCount = 32;
-	int hTileCount = 24;
+	const int vTileCount = 32;
+	const int hTileCount = 24;
 
 	int tileSize = 20;
+
+	const sf::Color gridColor = sf::Color(31, 31, 31);
 
 public:
 	Grid(int height);

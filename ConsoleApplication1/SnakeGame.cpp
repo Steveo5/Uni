@@ -14,6 +14,10 @@ class Game
 		std::vector<Snake> snake;
 		std::vector<sf::CircleShape> food;
 
+		sf::Vector2f lastPos;
+
+		sf::Font font;
+
 	public:
 		Game::Game()
 			: mWindow(sf::VideoMode(640, 480), "My Test Game")
@@ -22,6 +26,11 @@ class Game
 		{
 			Snake player1(1);
 			snake.push_back(player1);
+
+			if (!font.loadFromFile("Font/arial.ttf"))
+			{
+
+			}
 			/*
 			sf::CircleShape s1;0
 			s1.setRadius(10.f);
@@ -73,9 +82,15 @@ class Game
 			return gameState == 1;
 		}
 
-		void Game::start()
+		void Game::start(bool reset)
 		{
 			gameState = 1;
+
+			//Reset scores etc
+			if (reset)
+			{
+				
+			}
 		}
 
 		void Game::stop()
@@ -91,14 +106,22 @@ class Game
 			{
 				if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				{
+					if (isRunning())
+					{
 						stop();
 						menu.Open(0);
-					
+					}
+					else
+					{
+						start(false);
+						menu.Close();
+					}
+
 					return;
 				}
 				if (menu.getSelectedItemIndex() < 0)
 				{
-					start();
+					start(true);
 				}
 				if (gameState == 1)
 				{
@@ -137,27 +160,55 @@ class Game
 			{
 				snake[i].update(deltaTime);
 			}
-			if (food.size() < 1)
+			if (snake.size() > 0 && snake[0].getBody()[0].getPosition() != lastPos)
 			{
-				int multiple = 20;
-				
-				std::random_device rd;
-				std::mt19937 eng(rd());
-				std::uniform_int_distribution<> r(20, 200);
+				if (food.size() < 1)
+				{
+					std::random_device rd;
+					std::mt19937 eng(rd());
+					std::uniform_int_distribution<> rWidth(0.f, mWindow.getSize().x);
+					std::uniform_int_distribution<> rHeight(0.f, mWindow.getSize().y);
 
-				int rX = r(eng);
-				int rZ = r(eng);
+					int rX = rWidth(eng);
+					int rZ = rHeight(eng);
 
-				rX = rX + multiple - 1 - (rX - 1) % multiple;
-				rZ = rZ + multiple - 1 - (rZ - 1) % multiple;
+					sf::Vector2f tile = grid.getTileAt(sf::Vector2f(rX, rZ));
 
-				sf::CircleShape foodPiece;
-				foodPiece.setRadius(10.f);
-				foodPiece.setPosition(rX, rZ);
-				foodPiece.setFillColor(sf::Color::Green);
-				food.push_back(foodPiece);
+					sf::CircleShape foodPiece;
+					foodPiece.setRadius(10.f);
+					foodPiece.setPosition(tile.x, tile.y);
+					foodPiece.setFillColor(sf::Color::Green);
+					food.push_back(foodPiece);
+				}
+				//Food collision check
+				for (int i = 0; i < food.size(); i++)
+				{
+					for (int s = 0; s < snake.size(); s++)
+						if (snake[s].getBody()[0].getPosition() == food[i].getPosition())
+						{
+							snake[s].handleCollision(food[i], true);
+							food.erase(food.begin() + i);
+						}
+					//snake.erase(snake.begin() + s);
+				}
+				/*
+				//Check for body collision
+				for (int i = 0; i < snake.size(); i++)
+				{
+					for (int s = 0; s < snake.size(); s++)
+					{
+						for (int b = 0; b < snake[s].getBody().size();b++)
+						{
+							if (snake[i].getBody()[0].getPosition() == snake[s].getBody()[b].getPosition())
+							{
+								snake.erase(snake.begin() + i);
+							}
+						}
+					}
+				}
+				*/
+				lastPos = snake[0].getBody()[0].getPosition();
 			}
-
 		}
 
 		void Game::render()
@@ -181,10 +232,21 @@ class Game
 				{
 					mWindow.draw(food[i]);
 				}
+
+				sf::Text text;
+				std::string str = "Scores";
+				text.setFont(font);
+				text.setCharacterSize(12);
+				for (int i = 0; i < snake.size(); i++)
+				{
+					str += "\nPlayer 1 - " + std::to_string(snake[i].getScore());
+				}
+
+				text.setString(str);
+				mWindow.draw(text);
 			}
 			else if (gameState == 0)
 			{
-				std::cout << "drawing menu" << std::endl;
 				menu.Draw(mWindow);
 			}
 			mWindow.display();

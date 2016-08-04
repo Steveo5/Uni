@@ -7,7 +7,6 @@ Menu::Menu(float width, float height)
 {
 	if (!font.loadFromFile("Font/arial.ttf"))
 	{
-
 	}
 	sf::Text t1,t2,t3;
 	t1.setString("Start");
@@ -18,6 +17,15 @@ Menu::Menu(float width, float height)
 	buttons[0].push_back(t2);
 	buttons[0].push_back(t3);
 
+	sf::Text a1, a2, a3;
+	t1.setString("Easy");
+	t2.setString("Medium");
+	t3.setString("Hard");
+
+	buttons[1].push_back(a1);
+	buttons[1].push_back(a2);
+	buttons[1].push_back(a3);
+
 	for (int b = 0; b < 5; b++)
 	{
 		for (int i = 0; i < buttons[b].size(); i++)
@@ -25,6 +33,10 @@ Menu::Menu(float width, float height)
 			buttons[b][i].setFont(font);
 			buttons[b][i].setPosition(sf::Vector2f(width / 2 - (buttons[b][i].getLocalBounds().width / 2), height / 2 - ((buttons[b][i].getLocalBounds().height / 2) - i * 50)));
 		}
+	}
+	for (int i = 0; i < headers.size(); i++)
+	{
+
 	}
 }
 
@@ -38,6 +50,11 @@ void Menu::Open(int windowId)
 {
 	openMenu = windowId;
 	selectItemIndex = 0;
+}
+
+void Menu::Close()
+{
+	openMenu = -1;
 }
 
 void Menu::Draw(sf::RenderWindow &window)

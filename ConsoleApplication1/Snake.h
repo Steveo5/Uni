@@ -11,6 +11,8 @@ private:
 	std::vector<sf::CircleShape> snake;
 	int direction = 2;
 
+	int score = 0;
+
 public:
 
 	Snake(int playerNum);
@@ -18,8 +20,11 @@ public:
 	void update(sf::Time deltaTime);
 	void updateMovement(sf::Keyboard::Key key, bool isPressed);
 
-	std::vector<sf::CircleShape> getBody();
+	std::vector<sf::CircleShape> &getBody();
+	void handleCollision(sf::CircleShape obj, bool isFood);
 
+	int getScore();
+	void setScore(int score);
 
 };
 

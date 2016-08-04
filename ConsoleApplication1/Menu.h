@@ -15,6 +15,7 @@ public:
 	int getOpenMenu();
 	void handleInput(sf::Keyboard::Key key, bool isPressed);
 	int getSelectedItemIndex();
+	void Close();
 
 private:
 	
@@ -22,6 +23,7 @@ private:
 	int openMenu = 0;
 
 	std::vector<sf::Text> buttons[5];
+	std::vector<sf::Text> headers;
 	sf::Font font;
 	sf::Text text;
 
