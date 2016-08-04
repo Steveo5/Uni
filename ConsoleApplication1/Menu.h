@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "Game.h"
 
 class Menu
 {
@@ -13,7 +14,7 @@ public:
 	void MoveDown();
 	bool isOpen();
 	int getOpenMenu();
-	void handleInput(sf::Keyboard::Key key, bool isPressed);
+	int handleInput(sf::Keyboard::Key key, bool isPressed);
 	int getSelectedItemIndex();
 	void Close();
 

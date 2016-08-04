@@ -8,19 +8,21 @@ Menu::Menu(float width, float height)
 	if (!font.loadFromFile("Font/arial.ttf"))
 	{
 	}
-	sf::Text t1,t2,t3;
+	sf::Text t1,t2,t3, t4;
 	t1.setString("Start");
-	t2.setString("Options");
-	t3.setString("Quit");
+	t2.setString("Multiplayer");
+	t3.setString("Options");
+	t4.setString("Quit");
 
 	buttons[0].push_back(t1);
 	buttons[0].push_back(t2);
 	buttons[0].push_back(t3);
+	buttons[0].push_back(t4);
 
 	sf::Text a1, a2, a3;
-	t1.setString("Easy");
-	t2.setString("Medium");
-	t3.setString("Hard");
+	a1.setString("Easy");
+	a2.setString("Medium");
+	a3.setString("Hard");
 
 	buttons[1].push_back(a1);
 	buttons[1].push_back(a2);
@@ -89,7 +91,7 @@ void Menu::MoveDown()
 	selectItemIndex++;
 }
 
-void Menu::handleInput(sf::Keyboard::Key key, bool isPressed)
+int Menu::handleInput(sf::Keyboard::Key key, bool isPressed)
 {	
 	if (isPressed)
 	{
@@ -109,10 +111,24 @@ void Menu::handleInput(sf::Keyboard::Key key, bool isPressed)
 				if (selectItemIndex == 0)
 				{
 					selectItemIndex = -1;
+					return 1;
+				}
+				else if (selectItemIndex == 1)
+				{
+					return 2;
+				}
+				else if (selectItemIndex == 2)
+				{
+					openMenu = 1;
+				}
+				else if (selectItemIndex == 3)
+				{
+
 				}
 			}
 		}
 	}
+	return 0;
 }
 
 int Menu::getSelectedItemIndex()
