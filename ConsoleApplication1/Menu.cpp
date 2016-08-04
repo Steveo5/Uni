@@ -115,6 +115,7 @@ int Menu::handleInput(sf::Keyboard::Key key, bool isPressed)
 				}
 				else if (selectItemIndex == 1)
 				{
+					selectItemIndex = -1;
 					return 2;
 				}
 				else if (selectItemIndex == 2)

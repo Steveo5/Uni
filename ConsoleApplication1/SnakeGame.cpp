@@ -66,18 +66,19 @@ bool Game::isRunning()
 
 void Game::start(bool reset)
 {
+	//Reset scores etc
+	if (reset)
+	{
+		snake.clear();
+	}
+
 	gameState = 1;
 
 	for (int i = 1; i < playerCount+1; i++)
 	{
+		
 		Snake s(i);
 		snake.push_back(s);
-	}
-
-	//Reset scores etc
-	if (reset)
-	{
-				
 	}
 }
 
@@ -107,9 +108,10 @@ void Game::proccessEvents()
 
 			return;
 		}
-		if (menu.getSelectedItemIndex() < 0)
+		if (gameState == 0 && menu.getSelectedItemIndex() < 0)
 		{
-			start(true);
+			start(false);
+			gameState = 1;
 		}
 		if (gameState == 1)
 		{
@@ -128,7 +130,11 @@ void Game::proccessEvents()
 			switch (event.type)
 			{
 			case sf::Event::KeyPressed:
-				menu.handleInput(event.key.code, true);
+				playerCount = menu.handleInput(event.key.code, true);
+				if (playerCount > 0 && event.key.code == sf::Keyboard::Key::Space)
+				{
+					start(true);
+				}
 				break;
 			case sf::Event::KeyReleased:
 				menu.handleInput(event.key.code, false);
@@ -163,7 +169,7 @@ void Game::update(sf::Time deltaTime)
 				if (grid.getTileAt(snake[s].getBody()[0].getPosition()) == grid.getTileAt(food[i].getPosition()))
 				{
 					snake[s].handleCollision(food[i], true);
-					//food.erase(food.begin() + i);
+					food.erase(food.begin() + i);
 				}
 			}
 			//snake.erase(snake.begin() + s);
