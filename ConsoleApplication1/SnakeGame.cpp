@@ -12,10 +12,10 @@ class Game
 	private:
 		int gameState = 0;
 		std::vector<Snake> snake;
-		std::vector<sf::CircleShape> food;
+		std::vector<sf::CircleShape> &food = std::vector<sf::CircleShape>();
 
 		sf::Vector2f lastPos;
-
+		
 		sf::Font font;
 
 	public:
@@ -25,7 +25,9 @@ class Game
 			, grid(mWindow.getSize().y)
 		{
 			Snake player1(1);
+			Snake player2(2);
 			snake.push_back(player1);
+			snake.push_back(player2);
 
 			if (!font.loadFromFile("Font/arial.ttf"))
 			{
@@ -160,35 +162,24 @@ class Game
 			{
 				snake[i].update(deltaTime);
 			}
+			if (food.size() < 1)
+			{
+				generateFood();
+
+			}
 			if (snake.size() > 0 && snake[0].getBody()[0].getPosition() != lastPos)
 			{
-				if (food.size() < 1)
-				{
-					std::random_device rd;
-					std::mt19937 eng(rd());
-					std::uniform_int_distribution<> rWidth(0.f, mWindow.getSize().x);
-					std::uniform_int_distribution<> rHeight(0.f, mWindow.getSize().y);
-
-					int rX = rWidth(eng);
-					int rZ = rHeight(eng);
-
-					sf::Vector2f tile = grid.getTileAt(sf::Vector2f(rX, rZ));
-
-					sf::CircleShape foodPiece;
-					foodPiece.setRadius(10.f);
-					foodPiece.setPosition(tile.x, tile.y);
-					foodPiece.setFillColor(sf::Color::Green);
-					food.push_back(foodPiece);
-				}
 				//Food collision check
 				for (int i = 0; i < food.size(); i++)
 				{
 					for (int s = 0; s < snake.size(); s++)
-						if (snake[s].getBody()[0].getPosition() == food[i].getPosition())
+					{
+						if (grid.getTileAt(snake[s].getBody()[0].getPosition()) == grid.getTileAt(food[i].getPosition()))
 						{
 							snake[s].handleCollision(food[i], true);
 							food.erase(food.begin() + i);
 						}
+					}
 					//snake.erase(snake.begin() + s);
 				}
 				/*
@@ -235,11 +226,12 @@ class Game
 
 				sf::Text text;
 				std::string str = "Scores";
+			
 				text.setFont(font);
 				text.setCharacterSize(12);
 				for (int i = 0; i < snake.size(); i++)
 				{
-					str += "\nPlayer 1 - " + std::to_string(snake[i].getScore());
+					str += "\nPlayer " + std::to_string(snake[i].getNumber()) +  " - " + std::to_string(snake[i].getScore());
 				}
 
 				text.setString(str);
@@ -262,6 +254,28 @@ class Game
 			for (int i = 0; i < snake.size(); i++)
 			{
 				snake[i].updateMovement(key, isPressed);
+			}
+		}
+
+		void Game::generateFood()
+		{
+			if (food.size() < 1)
+			{
+				std::random_device rd;
+				std::mt19937 eng(rd());
+				std::uniform_int_distribution<> rWidth(0.f, mWindow.getSize().x);
+				std::uniform_int_distribution<> rHeight(0.f, mWindow.getSize().y);
+
+				int rX = rWidth(eng);
+				int rZ = rHeight(eng);
+
+				sf::Vector2f tile = grid.getTileAt(sf::Vector2f(rX, rZ));
+
+				sf::CircleShape foodPiece;
+				foodPiece.setRadius(10.f);
+				foodPiece.setPosition(tile.x, tile.y);
+				foodPiece.setFillColor(sf::Color::Green);
+				food.push_back(foodPiece);
 			}
 		}
 };

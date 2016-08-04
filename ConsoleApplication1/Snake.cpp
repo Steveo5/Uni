@@ -7,9 +7,10 @@ Snake::Snake(int playerNo)
 {
 	sf::CircleShape mPlayer;
 	mPlayer.setRadius(10.f);
-	mPlayer.setPosition(100.f, 100.f);
+	mPlayer.setPosition(100.f * playerNo, 100.f);
 	mPlayer.setFillColor(sf::Color::Yellow);
 	snake.push_back(mPlayer);
+	pNo = playerNo;
 }
 
 void Snake::update(sf::Time deltaTime)
@@ -23,10 +24,10 @@ void Snake::update(sf::Time deltaTime)
 		//Update the snakes body segement locations
 		for (int i = snake.size() - 1; i > 0; i--)
 		{
-					sf::Vector2f previousPos = snake[i - 1].getPosition();
-					//yPos = yPos + 20 - 1 - (yPos - 1) % 20;
+			sf::Vector2f previousPos = snake[i - 1].getPosition();
+			//yPos = yPos + 20 - 1 - (yPos - 1) % 20;
 
-					snake[i].setPosition(previousPos);
+			snake[i].setPosition(previousPos);
 	
 		}
 		//Get the snakes head location
@@ -104,7 +105,7 @@ void Snake::update(sf::Time deltaTime)
 }
 void Snake::updateMovement(sf::Keyboard::Key key, bool isPressed)
 {
-	if (isPressed)
+	if (isPressed && pNo == 1)
 	{
 		if (key == sf::Keyboard::D)
 		{
@@ -126,6 +127,28 @@ void Snake::updateMovement(sf::Keyboard::Key key, bool isPressed)
 			return;
 		}
 	}
+	else if (isPressed && pNo == 2)
+	{
+		if (key == sf::Keyboard::Right)
+		{
+			direction = 2;
+		}
+		else if (key == sf::Keyboard::Left)
+		{
+			direction = 1;
+		}
+		else if (key == sf::Keyboard::Up)
+		{
+			direction = 3;
+		}
+		else if (key == sf::Keyboard::Down)
+		{
+			direction = 4;
+		}
+		else {
+			return;
+		}
+	}
 
 }
 
@@ -139,12 +162,14 @@ void Snake::handleCollision(sf::CircleShape obj, bool isFood)
 {
 	if (isFood)
 	{
+
 		sf::CircleShape segment;
 		segment.setRadius(10.f);
 		segment.setPosition(100000.f, 100000.f);
 		segment.setFillColor(sf::Color::Cyan);
 		snake.push_back(segment);
 		score += 20;
+
 	}
 }
 
@@ -156,4 +181,9 @@ int Snake::getScore()
 void Snake::setScore(int newScore)
 {
 	score = newScore;
+}
+
+int Snake::getNumber()
+{
+	return pNo;
 }

@@ -12,6 +12,7 @@ private:
 	int direction = 2;
 
 	int score = 0;
+	int pNo;
 
 public:
 
@@ -25,6 +26,6 @@ public:
 
 	int getScore();
 	void setScore(int score);
-
+	int getNumber();
 };
 
