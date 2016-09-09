@@ -13,6 +13,7 @@ private:
 
 	int score = 0;
 	int pNo;
+	bool alive = true;
 
 public:
 
@@ -27,5 +28,7 @@ public:
 	int getScore();
 	void setScore(int score);
 	int getNumber();
+	bool isAlive();
+	void setAlive(bool aliv);
 };
 

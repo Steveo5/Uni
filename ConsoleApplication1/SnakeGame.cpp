@@ -154,7 +154,7 @@ void Game::update(sf::Time deltaTime)
 	{
 		snake[i].update(deltaTime);
 	}
-	if (food.size() < 1)
+	if (food.size() < 3)
 	{
 		generateFood();
 
@@ -162,34 +162,48 @@ void Game::update(sf::Time deltaTime)
 	if (snake.size() > 0 && snake[0].getBody()[0].getPosition() != lastPos)
 	{
 		//Food collision check
+		int toDel = -1;
 		for (int i = 0; i < food.size(); i++)
 		{
 			for (int s = 0; s < snake.size(); s++)
 			{
 				if (grid.getTileAt(snake[s].getBody()[0].getPosition()) == grid.getTileAt(food[i].getPosition()))
 				{
+					std::cout << i << " " << s << grid.getTileAt(snake[s].getBody()[0].getPosition()).x << grid.getTileAt(snake[s].getBody()[0].getPosition()).y << std::endl;
 					snake[s].handleCollision(food[i], true);
-					food.erase(food.begin() + i);
+					toDel = i;
 				}
 			}
 			//snake.erase(snake.begin() + s);
 		}
-		/*
-		//Check for body collision
-		for (int i = 0; i < snake.size(); i++)
+		if(toDel != -1)
+		food.erase(food.begin() + toDel);
+
+		//Check if snake needs to be removed from alive snakes
+		std::vector<int> toDelete;
+		for (int s = 0; s < snake.size(); s++)
 		{
-			for (int s = 0; s < snake.size(); s++)
-			{
-				for (int b = 0; b < snake[s].getBody().size();b++)
-				{
-					if (snake[i].getBody()[0].getPosition() == snake[s].getBody()[b].getPosition())
+			for (int o = 0; o < snake.size(); o++)
+			{	
+					for (int b = 1; b < snake[o].getBody().size(); b++)
 					{
-						snake.erase(snake.begin() + i);
+						if (snake[s].getBody()[0].getPosition() == snake[o].getBody()[b].getPosition())
+						{
+							toDelete.push_back(s);
+						}
 					}
-				}
+			
 			}
 		}
-		*/
+		for (int i = 0; i < toDelete.size(); i++)
+		{
+			std::cout << i << toDelete[i] << std::endl;
+
+			snake.erase(snake.begin() + toDelete[i]);
+	
+		}
+
+		
 		lastPos = snake[0].getBody()[0].getPosition();
 	}
 }
@@ -246,8 +260,6 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::generateFood()
 {
-	if (food.size() < 1)
-	{
 		std::random_device rd;
 		std::mt19937 eng(rd());
 		std::uniform_int_distribution<> rWidth(0.f, mWindow.getSize().x);
@@ -263,13 +275,27 @@ void Game::generateFood()
 		foodPiece.setPosition(tile.x, tile.y);
 		foodPiece.setFillColor(sf::Color::Green);
 		food.push_back(foodPiece);
-	}
 }
 
 void Game::setPlayers(int players)
 {
 	playerCount = players;
 }
+/*
+bool Game::hasGrid()
+{
+	return GRID;
+}
+bool Game::hasSound()
+{
+	return SOUND;
+}
+*/
+int Game::getDifficulty()
+{
+	return 3;
+}
+
 
 int main()
 {

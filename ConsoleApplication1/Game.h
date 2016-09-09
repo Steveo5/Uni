@@ -36,4 +36,8 @@ public:
 	void start(bool reset);
 	bool isRunning();
 	void setPlayers(int players);
+	
+	static bool hasGrid();
+	static bool hasSound();
+	static int getDifficulty();
 };

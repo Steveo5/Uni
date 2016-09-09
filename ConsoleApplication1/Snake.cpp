@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <math.h>
+#include "Game.h"
 
 Snake::Snake(int playerNo)
 {
@@ -16,7 +17,7 @@ Snake::Snake(int playerNo)
 void Snake::update(sf::Time deltaTime)
 {
 	//Update the snake every 10th of a second
-	if (clock.getElapsedTime().asSeconds() > 0.1f)
+	if (clock.getElapsedTime().asSeconds() > Game::getDifficulty() * 0.1)
 	{
 		//Restart the clock
 		clock.restart();
@@ -171,6 +172,10 @@ void Snake::handleCollision(sf::CircleShape obj, bool isFood)
 		score += 20;
 
 	}
+	else
+	{
+		setAlive(false);
+	}
 }
 
 int Snake::getScore()
@@ -186,4 +191,14 @@ void Snake::setScore(int newScore)
 int Snake::getNumber()
 {
 	return pNo;
+}
+
+bool Snake::isAlive()
+{
+	return alive;
+}
+
+void Snake::setAlive(bool aliv)
+{
+	alive = aliv;
 }
